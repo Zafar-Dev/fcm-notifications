@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { requestForToken, onMessageListener } from "../firebase";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -25,15 +25,15 @@ const HomePage = () => {
       .catch((err) => console.log("failed: ", err));
 
     // This registration token comes from the client FCM SDKs.
-    const registrationToken = "YOUR_REGISTRATION_TOKEN";
+    // const registrationToken = "YOUR_REGISTRATION_TOKEN";
 
-    const message = {
-      data: {
-        score: "850",
-        time: "2:45",
-      },
-      token: registrationToken,
-    };
+    // const message = {
+    //   data: {
+    //     score: "850",
+    //     time: "2:45",
+    //   },
+    //   token: registrationToken,
+    // };
 
     // Send a message to the device corresponding to the provided
     // registration token.
