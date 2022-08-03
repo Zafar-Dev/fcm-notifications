@@ -36,7 +36,7 @@ const HomePage = () => {
       topic: "hey topic",
       title,
       description: desc,
-      token: [token],
+      tokens: [token],
     };
 
     const options = {
