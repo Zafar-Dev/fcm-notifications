@@ -1,13 +1,19 @@
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { requestForToken, onMessageListener } from "../firebase";
 import { ToastContainer, toast } from "react-toastify";
 
 const HomePage = () => {
-  // const [token, setToken] = useState("");
+  const [token, setToken] = useState("");
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+
   useEffect(() => {
     console.log("... In Home Page ...");
-    requestForToken();
+    requestForToken().then((token) => {
+      console.log("Token ID => ", token);
+      setToken(token);
+    });
 
     onMessageListener()
       .then((payload) => {
@@ -23,64 +29,29 @@ const HomePage = () => {
         });
       })
       .catch((err) => console.log("failed: ", err));
-
-    // This registration token comes from the client FCM SDKs.
-    // const registrationToken = "YOUR_REGISTRATION_TOKEN";
-
-    // const message = {
-    //   data: {
-    //     score: "850",
-    //     time: "2:45",
-    //   },
-    //   token: registrationToken,
-    // };
-
-    // Send a message to the device corresponding to the provided
-    // registration token.
-    // getMessaging()
-    //   .send(message)
-    //   .then((response) => {
-    //     // Response is a message ID string.
-    //     console.log("Successfully sent message:", response);
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error sending message:", error);
-    //   });
   }, []);
 
-  const sendMessage = () => {
+  const sendMessage = useCallback(() => {
     const body = {
-      message: {
-        token:
-          "cZBaSVEUqrTfLHn64WsaVu:APA91bGKHyt_AGImY-OhbUH8tabJMvRFikgMpJ71nbYX55F5BWmRn3cRz2fMXXJRTxIsRNnsPMQAf0TVNTxBNGqlHUC1G7SFXOCFVFYI-YRov-fErXWCren23sOURnZuLlARjGuCwAtW",
-        notification: {
-          title: "FCM Message",
-          body: "This is a message from FCM",
-        },
-      },
+      topic: "hey topic",
+      title,
+      description: desc,
+      token: [token],
     };
 
     const options = {
       method: "POST",
-      headers: new Headers({
-        Authorization:
-          "Bearer ya29.A0AVA9y1tepiYKzDzpLJ7py790Hnm1iX1CPXkh4-ZznfTvjl_xsbJjfo8mGSWKKvGuLdksp7yJvi_w3J2XD7gUWQ51csHJWzoIy46F_kTjP5-fT_-sTktnxnaGa47Fa4jo-0GcUF8DeOsQGB70S2D48IIGJa1sYUNnWUtBVEFTQVRBU0ZRRTY1ZHI4RS1ITXNKb2RQeF9DRTBiSVFZMnlsdw0163",
-        "Content-Type": "application/json",
-      }),
+      body: body,
     };
-    console.log(body);
 
-    // https://fcm.googleapis.com/fcm/send
+    console.log("====================Request===================\n", body);
 
-    fetch(
-      "https://fcm.googleapis.com/v1/projects/fcm-notifications-c43cf/messages:send",
-      options
-    )
+    fetch("https://rao-fcm-notifications.herokuapp.com/notifications", options)
       .then((res) => console.log("RES => ", res))
       .catch((err) => {
         console.log("Error: ", err);
       });
-  };
+  }, [title, desc, token]);
 
   return (
     <div>
@@ -97,6 +68,7 @@ const HomePage = () => {
             <input
               className="px-2 text-sm w-5/6 focus:outline-none bg-amber-50"
               placeholder="Title"
+              onChange={(v) => setTitle(v.target.value)}
             />
           </div>
 
@@ -107,6 +79,7 @@ const HomePage = () => {
             <input
               className="px-2 text-sm w-5/6 focus:outline-none bg-amber-50"
               placeholder="Message"
+              onChange={(v) => setDesc(v.target.value)}
             />
           </div>
 

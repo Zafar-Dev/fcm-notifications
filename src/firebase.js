@@ -33,12 +33,14 @@ export const requestForToken = () => {
     .then((currentToken) => {
       if (currentToken) {
         console.log("current token for client: ", currentToken);
+        return currentToken;
         // Perform any other neccessary action with the token
       } else {
         // Show permission request UI
         console.log(
           "No registration token available. Request permission to generate one."
         );
+        return null;
       }
     })
     .catch((err) => {
