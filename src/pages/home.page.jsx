@@ -40,13 +40,17 @@ const HomePage = () => {
     };
 
     const options = {
+      // mode: "no-cors",
       method: "POST",
-      body: body,
+      body: JSON.stringify(body),
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+      }),
     };
 
     console.log("====================Request===================\n", body);
 
-    fetch("https://rao-fcm-notifications.herokuapp.com/notifications", options)
+    fetch("https://a004-203-101-190-68.in.ngrok.io/notifications/", options)
       .then((res) => console.log("RES => ", res))
       .catch((err) => {
         console.log("Error: ", err);
