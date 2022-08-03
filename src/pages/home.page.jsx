@@ -50,7 +50,7 @@ const HomePage = () => {
 
     console.log("====================Request===================\n", body);
 
-    fetch("https://a004-203-101-190-68.in.ngrok.io/notifications/", options)
+    fetch("https://rao-fcm-notifications.herokuapp.com/notifications/", options)
       .then((res) => console.log("RES => ", res))
       .catch((err) => {
         console.log("Error: ", err);
